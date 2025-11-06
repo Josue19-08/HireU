@@ -3,8 +3,8 @@ pragma solidity ^0.8.20;
 
 /**
  * @title UserStatistics
- * @dev Estadísticas inmutables de freelancers, propiedad del usuario
- * @notice Todas las estadísticas son inmutables y verificables on-chain
+ * @dev Immutable statistics de freelancers, owned by the user
+ * @notice All statistics are immutable and verifiable on-chain
  */
 contract UserStatistics {
     struct WorkRecord {
@@ -13,9 +13,9 @@ contract UserStatistics {
         address client;
         uint256 amount;
         uint256 completionDate;
-        string workHash; // IPFS hash del trabajo entregado
+        string workHash; // IPFS hash of the work delivered
         bool verified;
-        uint256 rating; // Rating del 1 al 5
+        uint256 rating; // Rating from 1 to 5
     }
 
     struct FreelancerStats {
@@ -30,16 +30,16 @@ contract UserStatistics {
         uint256 registrationDate;
     }
     
-    // Mapping separado para historial de trabajos (para evitar problemas de gas)
+    // Mapping separate for work history (to avoid gas issues)
     mapping(address => WorkRecord[]) public freelancerWorkHistory;
 
-    // Mapping de freelancer a sus estadísticas
+    // Mapping from freelancer to their statistics
     mapping(address => FreelancerStats) public freelancerStats;
     
-    // Mapping de projectId a WorkRecord para verificación cruzada
+    // Mapping from projectId to WorkRecord for cross-verification
     mapping(uint256 => WorkRecord) public workRecords;
 
-    // Eventos
+    // Events
     event WorkRecorded(
         address indexed freelancer,
         uint256 indexed projectId,
@@ -60,14 +60,14 @@ contract UserStatistics {
     }
 
     /**
-     * @dev Registra un nuevo trabajo completado
-     * @param _freelancer Address del freelancer
-     * @param _projectId ID único del proyecto
-     * @param _client Address del cliente
-     * @param _amount Monto pagado por el trabajo
-     * @param _workHash Hash IPFS del trabajo entregado
-     * @param _rating Rating dado por el cliente (1-5)
-     * @notice Solo puede ser llamado por el contrato de escrow después de completar un pago
+     * @dev Records a new completed work completedo
+     * @param _freelancer Freelancer address
+     * @param _projectId Unique project ID
+     * @param _client Client address
+     * @param _amount Amount paid for the work
+     * @param _workHash IPFS hash of the work delivered
+     * @param _rating Rating given by the client (1-5)
+     * @notice Can only be called by the escrow contract after completing a payment
      */
     function recordWork(
         address _freelancer,
@@ -97,7 +97,7 @@ contract UserStatistics {
 
         workRecords[_projectId] = newWork;
 
-        // Actualizar estadísticas del freelancer
+        // Update statistics of the freelancer
         FreelancerStats storage stats = freelancerStats[_freelancer];
         
         if (stats.registrationDate == 0) {
@@ -111,7 +111,7 @@ contract UserStatistics {
         stats.totalDeliveries++;
         freelancerWorkHistory[_freelancer].push(newWork);
 
-        // Calcular nuevo promedio de rating
+        // Calculate new average rating
         stats.totalRatings++;
         stats.averageRating = ((stats.averageRating * (stats.totalRatings - 1)) + _rating) / stats.totalRatings;
 
@@ -119,10 +119,10 @@ contract UserStatistics {
     }
 
     /**
-     * @dev Verifica un trabajo como entregado a tiempo o no
-     * @param _projectId ID del proyecto
-     * @param _verified Si el trabajo fue entregado a tiempo
-     * @notice Solo puede ser llamado por el contrato de ProjectManager o Escrow
+     * @dev Verifies a work as delivered on time or not
+     * @param _projectId Project ID
+     * @param _verified If the work was delivered on time
+     * @notice Can only be called by el contrato de ProjectManager o Escrow
      */
     function verifyWorkDelivery(uint256 _projectId, bool _verified) external {
         require(
@@ -142,9 +142,9 @@ contract UserStatistics {
     }
 
     /**
-     * @dev Obtiene las estadísticas completas de un freelancer
-     * @param _freelancer Address del freelancer
-     * @return FreelancerStats estadísticas completas
+     * @dev Gets the statistics complete of a freelancer
+     * @param _freelancer Freelancer address
+     * @return FreelancerStats complete statistics
      */
     function getFreelancerStats(address _freelancer)
         external
@@ -156,11 +156,11 @@ contract UserStatistics {
     }
 
     /**
-     * @dev Obtiene el historial de trabajos de un freelancer
-     * @param _freelancer Address del freelancer
-     * @param _startIndex Índice de inicio
-     * @param _count Cantidad de registros a obtener
-     * @return WorkRecord[] array de registros de trabajo
+     * @dev Gets the history of work of a freelancer
+     * @param _freelancer Freelancer address
+     * @param _startIndex Start index
+     * @param _count Number of records to get
+     * @return WorkRecord[] array of work records
      */
     function getWorkHistory(
         address _freelancer,
@@ -190,9 +190,9 @@ contract UserStatistics {
     }
 
     /**
-     * @dev Obtiene un registro de trabajo específico
-     * @param _projectId ID del proyecto
-     * @return WorkRecord registro del trabajo
+     * @dev Gets a record of specific work
+     * @param _projectId Project ID
+     * @return WorkRecord work record
      */
     function getWorkRecord(uint256 _projectId) external view returns (WorkRecord memory) {
         require(
@@ -203,8 +203,8 @@ contract UserStatistics {
     }
 
     /**
-     * @dev Calcula el porcentaje de entregas a tiempo
-     * @param _freelancer Address del freelancer
+     * @dev Calculates the percentage of on-time deliveries
+     * @param _freelancer Freelancer address
      * @return uint256 porcentaje (0-100)
      */
     function getOnTimeDeliveryRate(address _freelancer)
@@ -221,9 +221,9 @@ contract UserStatistics {
     }
 
     /**
-     * @dev Obtiene el número total de trabajos de un freelancer
-     * @param _freelancer Address del freelancer
-     * @return uint256 número total de trabajos
+     * @dev Gets the total number of works of a freelancer
+     * @param _freelancer Freelancer address
+     * @return uint256 total number of works
      */
     function getTotalWorks(address _freelancer)
         external

@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  console.log("🚀 Desplegando contratos de HireU...\n");
+  console.log("🚀 Deploying OFFER-HUB contracts...\n");
 
   const [deployer] = await hre.ethers.getSigners();
   console.log("📝 Desplegando con la cuenta:", deployer.address);
@@ -89,7 +89,7 @@ async function main() {
     `deployments/${hre.network.name}.json`,
     JSON.stringify(deploymentInfo, null, 2)
   );
-  console.log("💾 Información de deployment guardada en deployments/" + hre.network.name + ".json");
+  console.log("💾 Deployment information saved in deployments/" + hre.network.name + ".json");
 }
 
 main()

@@ -7,8 +7,8 @@ import "./EscrowPayment.sol";
 
 /**
  * @title WorkVerification
- * @dev Sistema de verificación de trabajos entregados con validación inmutable
- * @notice Cada verificación es permanente y verificable on-chain
+ * @dev Work verification system of  delivereds with immutable validation
+ * @notice Each verification is permanent y verificable on-chain
  */
 contract WorkVerification {
     enum VerificationStatus {
@@ -23,9 +23,9 @@ contract WorkVerification {
         uint256 projectId;
         address freelancer;
         address client;
-        address verifier; // Address que verificó (puede ser cliente u oráculo)
-        string workHash; // IPFS hash del trabajo entregado
-        string requirementsHash; // IPFS hash de los requisitos originales
+        address verifier; // Address that verified (can be client or oracle)
+        string workHash; // IPFS hash of the work delivered
+        string requirementsHash; // IPFS hash of requirements original
         VerificationStatus status;
         uint256 verifiedAt;
         string rejectionReason;
@@ -36,32 +36,32 @@ contract WorkVerification {
 
     struct WorkEvidence {
         uint256 verificationId;
-        string[] evidenceHashes; // Array de hashes IPFS con evidencia
+        string[] evidenceHashes; // Array of IPFS hashes with evidence
         uint256 timestamp;
         address submitter;
     }
 
-    // Mapping de verificationId a Verification
+    // Mapping from verificationId to Verification
     mapping(uint256 => Verification) public verifications;
     
-    // Mapping de projectId a verificationId
+    // Mapping from projectId to verificationId
     mapping(uint256 => uint256) public projectVerifications;
     
-    // Mapping de verificationId a WorkEvidence
+    // Mapping from verificationId to WorkEvidence
     mapping(uint256 => WorkEvidence) public workEvidence;
     
-    // Contador de verificaciones
+    // Counter for verificaciones
     uint256 public verificationCounter;
     
-    // Referencias a otros contratos
+    // References to other contracts
     ProjectManager public projectManager;
     UserStatistics public userStatistics;
     EscrowPayment public escrowPayment;
     
-    // Mapping de address a bool para verificar si es oráculo autorizado
+    // Mapping from address to bool to check if it is an oracle authorized
     mapping(address => bool) public authorizedOracles;
 
-    // Eventos
+    // Events
     event VerificationCreated(
         uint256 indexed verificationId,
         uint256 indexed projectId,
@@ -129,8 +129,8 @@ contract WorkVerification {
     }
 
     /**
-     * @dev Autoriza un oráculo para verificar trabajos
-     * @param _oracle Address del oráculo a autorizar
+     * @dev Authorizes an oracle to verify work
+     * @param _oracle Address of the oracle to authorize
      */
     function authorizeOracle(address _oracle) external {
         require(_oracle != address(0), "WorkVerification: Invalid oracle address");
@@ -138,9 +138,9 @@ contract WorkVerification {
     }
 
     /**
-     * @dev Crea una nueva verificación para un proyecto
-     * @param _projectId ID del proyecto
-     * @return uint256 ID de la verificación creada
+     * @dev Creates a new verification for a project
+     * @param _projectId Project ID
+     * @return uint256 ID of the created verification
      */
     function createVerification(uint256 _projectId)
         external
@@ -191,10 +191,10 @@ contract WorkVerification {
     }
 
     /**
-     * @dev El freelancer envía su trabajo para verificación
-     * @param _verificationId ID de la verificación
-     * @param _workHash Hash IPFS del trabajo entregado
-     * @param _evidenceHashes Array de hashes IPFS con evidencia adicional
+     * @dev The freelancer submits their work for verification
+     * @param _verificationId Verification ID
+     * @param _workHash IPFS hash of the work delivered
+     * @param _evidenceHashes Array of IPFS hashes with additional evidence
      */
     function submitWork(
         uint256 _verificationId,
@@ -216,7 +216,7 @@ contract WorkVerification {
         verification.submittedAt = block.timestamp;
         verification.meetsDeadline = block.timestamp <= verification.deadline;
 
-        // Guardar evidencia
+        // Save evidence
         workEvidence[_verificationId] = WorkEvidence({
             verificationId: _verificationId,
             evidenceHashes: _evidenceHashes,
@@ -226,17 +226,17 @@ contract WorkVerification {
 
         emit VerificationSubmitted(_verificationId, _workHash, msg.sender);
         
-        // Emitir eventos para cada evidencia
+        // Emit events for each evidence
         for (uint256 i = 0; i < _evidenceHashes.length; i++) {
             emit EvidenceAdded(_verificationId, _evidenceHashes[i]);
         }
     }
 
     /**
-     * @dev Verifica un trabajo (cliente u oráculo)
-     * @param _verificationId ID de la verificación
-     * @param _verified true si el trabajo cumple con los requisitos
-     * @param _reason Razón de rechazo (si aplica)
+     * @dev Verifies a work (client or oracle)
+     * @param _verificationId Verification ID
+     * @param _verified true if the work meets the requirements
+     * @param _reason Rejection reason (if applicable)
      */
     function verifyWork(
         uint256 _verificationId,
@@ -263,7 +263,7 @@ contract WorkVerification {
         if (_verified) {
             verification.status = VerificationStatus.Verified;
             
-            // Notificar a UserStatistics que el trabajo fue entregado a tiempo
+            // Notify UserStatistics that the work was delivered on time
             userStatistics.verifyWorkDelivery(
                 verification.projectId,
                 verification.meetsDeadline
@@ -279,9 +279,9 @@ contract WorkVerification {
     }
 
     /**
-     * @dev Agrega evidencia adicional a una verificación
-     * @param _verificationId ID de la verificación
-     * @param _evidenceHash Hash IPFS de la evidencia
+     * @dev Adds additional evidence to a verification
+     * @param _verificationId Verification ID
+     * @param _evidenceHash IPFS hash of the evidence
      */
     function addEvidence(
         uint256 _verificationId,
@@ -299,9 +299,9 @@ contract WorkVerification {
     }
 
     /**
-     * @dev Obtiene una verificación completa
-     * @param _verificationId ID de la verificación
-     * @return Verification verificación completa
+     * @dev Gets a verification complete
+     * @param _verificationId Verification ID
+     * @return Verification complete verification
      */
     function getVerification(uint256 _verificationId)
         external
@@ -313,9 +313,9 @@ contract WorkVerification {
     }
 
     /**
-     * @dev Obtiene la evidencia de un trabajo
-     * @param _verificationId ID de la verificación
-     * @return WorkEvidence evidencia del trabajo
+     * @dev Gets the evidence of a work
+     * @param _verificationId Verification ID
+     * @return WorkEvidence work evidence
      */
     function getWorkEvidence(uint256 _verificationId)
         external
@@ -327,9 +327,9 @@ contract WorkVerification {
     }
 
     /**
-     * @dev Obtiene el ID de verificación de un proyecto
-     * @param _projectId ID del proyecto
-     * @return uint256 ID de la verificación
+     * @dev Gets the ID of verification of a project
+     * @param _projectId Project ID
+     * @return uint256 Verification ID
      */
     function getVerificationByProject(uint256 _projectId)
         external
@@ -340,9 +340,9 @@ contract WorkVerification {
     }
 
     /**
-     * @dev Verifica si un trabajo fue entregado a tiempo
-     * @param _verificationId ID de la verificación
-     * @return bool true si fue entregado a tiempo
+     * @dev Checks if a work was delivered on time
+     * @param _verificationId Verification ID
+     * @return bool true si was delivered on time
      */
     function wasWorkOnTime(uint256 _verificationId)
         external

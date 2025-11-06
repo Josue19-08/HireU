@@ -29,7 +29,7 @@ export default function Footer() {
                 <div className="w-12 h-12 bg-gradient-to-br from-[#15949C] to-[#002333] rounded-lg flex items-center justify-center mr-3">
                   <span className="text-white font-bold text-xl">H</span>
                 </div>
-                <span className="text-2xl font-bold">HireU</span>
+                <span className="text-2xl font-bold">OFFER-HUB</span>
               </Link>
               <p className="text-white/70 mb-6 max-w-xs leading-relaxed text-sm">
                 Connecting talented professionals with clients worldwide for
@@ -58,7 +58,7 @@ export default function Footer() {
               <div className="space-y-2 text-sm text-white/70">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  <span>hello@hireu.com</span>
+                  <span>hello@offer-hub.com</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
@@ -173,7 +173,7 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/60 text-sm">
-              © {new Date().getFullYear()} HireU. All rights reserved. (UI Demo Only)
+              © {new Date().getFullYear()} OFFER-HUB. All rights reserved. (UI Demo Only)
             </p>
             <div className="flex gap-6 text-sm">
               <Link href="#" className="text-white/60 hover:text-[#15949C] transition-colors">

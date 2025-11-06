@@ -9,8 +9,8 @@ import "./UserStatistics.sol";
 
 /**
  * @title EscrowPayment
- * @dev Sistema de pagos con escrow usando SRCW (Smart Contract Revenue Wallets)
- * @notice Integra wallets inteligentes para gestionar pagos de forma segura
+ * @dev Payment system with escrow using SRCW (Smart Contract Revenue Wallets)
+ * @notice Integrates smart wallets to manage payments securely
  */
 contract EscrowPayment is ReentrancyGuard, Ownable {
     enum PaymentStatus {
@@ -26,12 +26,12 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
         uint256 projectId;
         address client;
         address freelancer;
-        address token; // Address del token (address(0) para AVAX)
+        address token; // Token address (address(0) for AVAX)
         uint256 amount;
         uint256 fundedAt;
         uint256 releasedAt;
         PaymentStatus status;
-        string workHash; // IPFS hash del trabajo verificado
+        string workHash; // IPFS hash of the work verified
     }
 
     struct SRCWWalletInfo {
@@ -41,30 +41,30 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
         uint256 balance;
     }
     
-    // Mapping de paymentId a Payment
+    // Mapping from paymentId to Payment
     mapping(uint256 => Payment) public payments;
     
-    // Mapping de projectId a paymentId
+    // Mapping from projectId to paymentId
     mapping(uint256 => uint256) public projectPayments;
     
-    // Mapping de address a SRCWWalletInfo
+    // Mapping from address to SRCWWalletInfo
     mapping(address => SRCWWalletInfo) public srcwWallets;
     
-    // Mapping separado para token balances (address => token => balance)
+    // Mapping separate for token balances (address => token => balance)
     mapping(address => mapping(address => uint256)) public srcwTokenBalances;
     
-    // Contador de pagos
+    // Counter for pagos
     uint256 public paymentCounter;
     
-    // Referencias a otros contratos
+    // References to other contracts
     ProjectManager public projectManager;
     UserStatistics public userStatistics;
     
-    // Fee del contrato (en basis points, 100 = 1%)
+    // Fee of the contract (in basis points, 100 = 1%)
     uint256 public platformFee = 250; // 2.5%
     address public feeRecipient;
 
-    // Eventos
+    // Events
     event PaymentCreated(
         uint256 indexed paymentId,
         uint256 indexed projectId,
@@ -127,9 +127,9 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Crea un SRCW wallet para un usuario
-     * @param _owner Address del propietario del wallet
-     * @return address Address del wallet creado
+     * @dev Creates an SRCW wallet for a user
+     * @param _owner Address of the owner of the wallet
+     * @return address Address of the wallet created
      */
     function createSRCWWallet(address _owner) external returns (address) {
         require(_owner != address(0), "EscrowPayment: Invalid owner address");
@@ -138,8 +138,8 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
             "EscrowPayment: Wallet already exists"
         );
 
-        // En producción, esto sería un contrato de wallet desplegado
-        // Por ahora, usamos el address del usuario como wallet
+        // In production, this would be a deployed wallet contract
+        // For now, we use the user address as wallet
         address walletAddress = _owner;
         
         srcwWallets[_owner] = SRCWWalletInfo({
@@ -154,11 +154,11 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Crea un pago en escrow para un proyecto
-     * @param _projectId ID del proyecto
-     * @param _token Address del token (address(0) para AVAX)
-     * @param _amount Monto a depositar
-     * @return uint256 ID del pago creado
+     * @dev Creates a payment in escrow for a project
+     * @param _projectId Project ID
+     * @param _token Token address (address(0) for AVAX)
+     * @param _amount Amount to deposit
+     * @return uint256 Payment ID created
      */
     function createPayment(
         uint256 _projectId,
@@ -167,7 +167,7 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     ) external payable nonReentrant returns (uint256) {
         require(_amount > 0, "EscrowPayment: Amount must be greater than 0");
         
-        // Verificar que el proyecto existe y está en estado correcto
+        // Verify that the project exists and is in status correct
         ProjectManager.Project memory project = projectManager.getProject(_projectId);
         require(
             project.status == ProjectManager.ProjectStatus.InProgress ||
@@ -212,15 +212,15 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
             _amount
         );
 
-        // Si es AVAX, recibir el pago directamente
+        // If it is AVAX, receive the payment directly
         if (_token == address(0)) {
             require(msg.value == _amount, "EscrowPayment: AVAX amount mismatch");
             payments[paymentCounter].status = PaymentStatus.Funded;
             payments[paymentCounter].fundedAt = block.timestamp;
             emit PaymentFunded(paymentCounter, msg.sender, _amount);
         } else {
-            // Para tokens ERC20, el usuario debe hacer approve primero
-            // Este contrato debería llamar transferFrom después
+            // For ERC20 tokens, the user must approve first
+            // This contract should call transferFrom afterwards
             revert("EscrowPayment: ERC20 funding not implemented yet");
         }
 
@@ -228,8 +228,8 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Fondea un pago con tokens ERC20
-     * @param _paymentId ID del pago
+     * @dev Funds a payment with ERC20 tokens
+     * @param _paymentId Payment ID
      */
     function fundPaymentWithToken(uint256 _paymentId) external nonReentrant validPayment(_paymentId) {
         Payment storage payment = payments[_paymentId];
@@ -253,10 +253,10 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Libera el pago al freelancer después de completar el trabajo
-     * @param _paymentId ID del pago
-     * @param _workHash Hash IPFS del trabajo completado
-     * @param _rating Rating del trabajo (1-5)
+     * @dev Releases the payment to the freelancer after completing the work
+     * @param _paymentId Payment ID
+     * @param _workHash IPFS hash of the work completedo
+     * @param _rating Work rating (1-5)
      */
     function releasePayment(
         uint256 _paymentId,
@@ -301,7 +301,7 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
         payment.releasedAt = block.timestamp;
         payment.workHash = _workHash;
 
-        // Registrar trabajo en UserStatistics
+        // Register work in UserStatistics
         userStatistics.recordWork(
             payment.freelancer,
             payment.projectId,
@@ -315,8 +315,8 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Reembolsa el pago al cliente
-     * @param _paymentId ID del pago
+     * @dev Refunds the payment to the client
+     * @param _paymentId Payment ID
      */
     function refundPayment(uint256 _paymentId)
         external
@@ -333,7 +333,7 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
             "EscrowPayment: Unauthorized refund"
         );
 
-        // Transferir de vuelta al cliente
+        // Transferir de vuelta to the client
         if (payment.token == address(0)) {
             (bool success, ) = payment.client.call{value: payment.amount}("");
             require(success, "EscrowPayment: Refund transfer failed");
@@ -351,9 +351,9 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Obtiene un pago completo
-     * @param _paymentId ID del pago
-     * @return Payment pago completo
+     * @dev Gets a payment completo
+     * @param _paymentId Payment ID
+     * @return Payment complete payment
      */
     function getPayment(uint256 _paymentId)
         external
@@ -365,9 +365,9 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Obtiene el ID de pago de un proyecto
-     * @param _projectId ID del proyecto
-     * @return uint256 ID del pago
+     * @dev Gets the payment ID of a project
+     * @param _projectId Project ID
+     * @return uint256 Payment ID
      */
     function getPaymentByProject(uint256 _projectId)
         external
@@ -378,8 +378,8 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Establece el fee de la plataforma
-     * @param _fee Nuevo fee en basis points
+     * @dev Sets the fee of the platform
+     * @param _fee New fee in basis points
      */
     function setPlatformFee(uint256 _fee) external onlyOwner {
         require(_fee <= 1000, "EscrowPayment: Fee too high (max 10%)");
@@ -387,15 +387,15 @@ contract EscrowPayment is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @dev Establece el recipient del fee
-     * @param _feeRecipient Nuevo address para recibir fees
+     * @dev Sets the recipient of the fee
+     * @param _feeRecipient New address to receive fees
      */
     function setFeeRecipient(address _feeRecipient) external onlyOwner {
         require(_feeRecipient != address(0), "EscrowPayment: Invalid fee recipient");
         feeRecipient = _feeRecipient;
     }
 
-    // Función para recibir AVAX
+    // Function to receive AVAX
     receive() external payable {}
 }
 

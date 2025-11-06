@@ -1,13 +1,13 @@
-# HireU - Guía de Configuración
+# OFFER-HUB - Setup Guide
 
-## ✅ Proyecto Completado
+## ✅ Project Completed
 
-Se ha creado exitosamente un **clon estético del frontend de OfferHub** llamado **HireU**, sin funcionalidades de backend, solo UI demostrativa.
+Successfully created an **aesthetic clone of OfferHub's frontend** called **OFFER-HUB**, without backend functionalities, only demonstrative UI.
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
-HireU/
+OFFER-HUB/
 ├── src/
 │   ├── app/
 │   │   ├── (client)/
@@ -26,7 +26,7 @@ HireU/
 │   │   │   ├── header.tsx
 │   │   │   ├── footer.tsx
 │   │   │   └── navbar.tsx
-│   │   └── ui/ (10+ componentes shadcn/ui)
+│   │   └── ui/ (10+ shadcn/ui components)
 │   └── lib/
 │       ├── mock-data/
 │       │   └── talent-data.ts
@@ -37,91 +37,90 @@ HireU/
 └── next.config.ts
 ```
 
-## 🎨 Páginas Implementadas
+## 🎨 Implemented Pages
 
-1. **Landing Page** (`/`) - Página principal con hero, features y CTA
-2. **Sign Up** (`/onboarding/sign-up`) - Registro con email/wallet
-3. **Sign In** (`/onboarding/sign-in`) - Inicio de sesión
-4. **Find Talent** (`/talent`) - Búsqueda de freelancers con mock data
-5. **Post Project** (`/post-project`) - Wizard multi-step para publicar proyectos
-6. **Profile** (`/profile`) - Perfil de usuario con información mock
-7. **Messages** (`/messages`) - Sistema de mensajería simulado
+1. **Landing Page** (`/`) - Main page with hero, features and CTA
+2. **Sign Up** (`/onboarding/sign-up`) - Registration with email/wallet
+3. **Sign In** (`/onboarding/sign-in`) - Login
+4. **Find Talent** (`/talent`) - Freelancer search with mock data
+5. **Post Project** (`/post-project`) - Multi-step wizard to post projects
+6. **Profile** (`/profile`) - User profile with mock information
+7. **Messages** (`/messages`) - Simulated messaging system
 
-## 🚀 Cómo Ejecutar
+## 🚀 How to Run
 
 ```bash
-# Instalar dependencias (si aún no se instalaron)
+# Install dependencies (if not already installed)
 npm install
 
-# Ejecutar en modo desarrollo
+# Run in development mode
 npm run dev
 
-# Compilar para producción
+# Build for production
 npm run build
 
-# Iniciar servidor de producción
+# Start production server
 npm start
 ```
 
-El proyecto estará disponible en: **http://localhost:3000**
+The project will be available at: **http://localhost:3000**
 
-## 🎯 Características
+## 🎯 Features
 
-### ✅ Implementado
-- ✨ UI completamente funcional y responsive
-- 🎨 Diseño idéntico a OfferHub (colores, estilos, layouts)
-- 🔄 Navegación entre páginas funcionando
-- 📱 Soporte mobile/tablet/desktop
-- 🌙 Configuración de dark mode lista (componentes preparados)
-- 🎭 Mock data para demostración
-- ⚡ Componentes organizados y reutilizables
+### ✅ Implemented
+- ✨ Fully functional and responsive UI
+- 🎨 Design identical to OfferHub (colors, styles, layouts)
+- 🔄 Navigation between pages working
+- 📱 Mobile/tablet/desktop support
+- 🌙 Dark mode configuration ready (components prepared)
+- 🎭 Mock data for demonstration
+- ⚡ Organized and reusable components
 
-### ❌ NO Implementado (según requerimiento)
-- 🚫 Sin backend - no hay APIs reales
-- 🚫 Sin autenticación - solo simulada con alerts
-- 🚫 Sin base de datos - todo es mock data
-- 🚫 Sin funcionalidades de envío de formularios
-- 🚫 Sin procesamiento de pagos
-- 🚫 Sin almacenamiento persistente
+### ❌ NOT Implemented (as required)
+- 🚫 No backend - no real APIs
+- 🚫 No authentication - only simulated with alerts
+- 🚫 No database - everything is mock data
+- 🚫 No form submission functionalities
+- 🚫 No payment processing
+- 🚫 No persistent storage
 
-## 📦 Tecnologías Utilizadas
+## 📦 Technologies Used
 
 - **Framework:** Next.js 15 (App Router)
-- **Lenguaje:** TypeScript
-- **Estilos:** Tailwind CSS
-- **Componentes UI:** Radix UI + shadcn/ui
-- **Animaciones:** Framer Motion
-- **Iconos:** Lucide React
+- **Language:** TypeScript
+- **Styles:** Tailwind CSS
+- **UI Components:** Radix UI + shadcn/ui
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
 
-## 🎨 Paleta de Colores
+## 🎨 Color Palette
 
 - **Primary:** #15949C (Teal)
 - **Secondary:** #002333 (Dark Blue)
-- **Accent:** Gradientes entre primary y secondary
+- **Accent:** Gradients between primary and secondary
 
-## 📝 Notas Importantes
+## 📝 Important Notes
 
-1. **Modo Demo:** Todas las acciones (registro, login, envío de mensajes, etc.) muestran alerts indicando "Demo Mode"
-2. **Mock Data:** Los talentos, mensajes y proyectos son datos de ejemplo
-3. **Navegación:** Todos los enlaces internos funcionan correctamente
-4. **Formularios:** Tienen validación visual pero no envían datos reales
-5. **Responsive:** Diseñado mobile-first con breakpoints md y lg
+1. **Demo Mode:** All actions (registration, login, sending messages, etc.) show alerts indicating "Demo Mode"
+2. **Mock Data:** Talents, messages and projects are example data
+3. **Navigation:** All internal links work correctly
+4. **Forms:** Have visual validation but don't send real data
+5. **Responsive:** Designed mobile-first with md and lg breakpoints
 
-## 🔧 Personalización
+## 🔧 Customization
 
-Para personalizar el proyecto:
+To customize the project:
 
-1. **Colores:** Modifica `tailwind.config.ts`
-2. **Logo:** Cambia el gradiente en navbar y footer
-3. **Mock Data:** Edita `/src/lib/mock-data/talent-data.ts`
-4. **Estilos globales:** Modifica `/src/app/globals.css`
+1. **Colors:** Modify `tailwind.config.ts`
+2. **Logo:** Change the gradient in navbar and footer
+3. **Mock Data:** Edit `/src/lib/mock-data/talent-data.ts`
+4. **Global Styles:** Modify `/src/app/globals.css`
 
-## ⚠️ Recordatorio
+## ⚠️ Reminder
 
-Este es un **proyecto de demostración UI únicamente**. No contiene lógica de backend, autenticación real, ni persistencia de datos. Es perfecto para:
+This is a **UI demonstration project only**. It does not contain backend logic, real authentication, or data persistence. Perfect for:
 
-- Prototipos visuales
-- Demostraciones de diseño
-- Base para desarrollo futuro
-- Presentaciones a clientes
-
+- Visual prototypes
+- Design demonstrations
+- Base for future development
+- Client presentations

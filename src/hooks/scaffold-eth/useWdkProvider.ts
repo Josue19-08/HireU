@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
 /**
- * Hook para obtener el provider de ethers.js usando WDK
+ * Hook to get ethers.js provider using WDK
  */
 export function useWdkProvider() {
   const { wdk, network, account } = useWdk();
@@ -18,19 +18,19 @@ export function useWdkProvider() {
     }
 
     try {
-      // Crear provider usando la RPC URL con configuración de red estática
+      // Create provider using RPC URL with static network configuration
       const rpcProvider = new ethers.JsonRpcProvider(network.rpcUrl, undefined, {
         staticNetwork: new ethers.Network("avalanche", network.chainId),
       });
       setProvider(rpcProvider);
 
-      // Crear signer usando WDK
+      // Create signer using WDK
       const accountInstance = wdk.getAccount(network.chainId.toString(), 0);
-      // Crear wallet desde private key
+      // Create wallet from private key
       const wdkSigner = new ethers.Wallet(accountInstance.privateKey, rpcProvider);
       setSigner(wdkSigner);
     } catch (error: any) {
-      // No mostrar error si es un problema de conexión (normal en desarrollo)
+      // Don't show error if it's a connection issue (normal in development)
       if (!error?.message?.includes("Failed to fetch")) {
         console.error("Error creating provider/signer:", error);
       }

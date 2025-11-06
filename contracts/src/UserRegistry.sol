@@ -3,15 +3,15 @@ pragma solidity ^0.8.20;
 
 /**
  * @title UserRegistry
- * @dev Registro de usuarios con verificación y propiedad de datos
- * @notice Todos los datos de usuarios son inmutables y propiedad del usuario
+ * @dev User registration with verification and data ownership
+ * @notice All user data is immutable and owned by the user
  */
 contract UserRegistry {
     struct UserProfile {
         address userAddress;
         string username;
         string email;
-        string profileHash; // IPFS hash del perfil
+        string profileHash; // IPFS hash of the profile
         bool isVerified;
         bool isFreelancer;
         bool isClient;
@@ -23,22 +23,22 @@ contract UserRegistry {
         bool isVerified;
         string verificationMethod; // "KYC", "SOCIAL", "REPUTATION"
         uint256 verificationDate;
-        address verifier; // Address que verificó (puede ser el mismo usuario o un oráculo)
+        address verifier; // Address that verified (can be the user themselves or an oracle)
     }
 
-    // Mapping de address a perfil de usuario
+    // Mapping from address to user profile
     mapping(address => UserProfile) public userProfiles;
     
-    // Mapping de address a datos de verificación
+    // Mapping from address to verification data
     mapping(address => VerificationData) public verifications;
     
-    // Mapping para verificar si un username ya está en uso
+    // Mapping to check if a username is already taken
     mapping(string => bool) public usernameTaken;
     
-    // Mapping para verificar si un email ya está registrado
+    // Mapping to check if an email is already registered
     mapping(string => bool) public emailRegistered;
     
-    // Eventos
+    // Events
     event UserRegistered(
         address indexed user,
         string username,
@@ -74,12 +74,12 @@ contract UserRegistry {
     }
 
     /**
-     * @dev Registra un nuevo usuario en la plataforma
-     * @param _username Nombre de usuario único
-     * @param _email Email del usuario
-     * @param _profileHash Hash IPFS del perfil completo
-     * @param _isFreelancer Si el usuario es freelancer
-     * @param _isClient Si el usuario es cliente
+     * @dev Registers a new user on the platform
+     * @param _username Unique username
+     * @param _email User email
+     * @param _profileHash IPFS hash of the complete profile
+     * @param _isFreelancer Whether the user is a freelancer
+     * @param _isClient Whether the user is a client
      */
     function registerUser(
         string memory _username,
@@ -113,9 +113,9 @@ contract UserRegistry {
     }
 
     /**
-     * @dev Actualiza el perfil del usuario (solo el usuario puede actualizar su perfil)
-     * @param _profileHash Nuevo hash IPFS del perfil
-     * @notice Los datos históricos permanecen inmutables, solo se actualiza el hash
+     * @dev Updates the user profile (only the user can update their profile)
+     * @param _profileHash New IPFS hash of the profile
+     * @notice Historical data remains immutable, only the hash is updated
      */
     function updateProfile(string memory _profileHash) external onlyRegistered {
         require(bytes(_profileHash).length > 0, "UserRegistry: Profile hash cannot be empty");
@@ -127,10 +127,10 @@ contract UserRegistry {
     }
 
     /**
-     * @dev Verifica un usuario (puede ser auto-verificación o por oráculo)
-     * @param _user Address del usuario a verificar
-     * @param _verificationMethod Método de verificación usado
-     * @notice Solo el usuario mismo o un oráculo autorizado puede verificar
+     * @dev Verifies a user (can be self-verification or by oracle)
+     * @param _user Address of the user to verify
+     * @param _verificationMethod Verification method used
+     * @notice Only the user themselves or an authorized oracle can verify
      */
     function verifyUser(
         address _user,
@@ -141,7 +141,7 @@ contract UserRegistry {
             "UserRegistry: User not registered"
         );
         require(
-            msg.sender == _user || msg.sender == address(this), // Permitir auto-verificación o oráculo
+            msg.sender == _user || msg.sender == address(this), // Allow self-verification or oracle
             "UserRegistry: Unauthorized verification"
         );
 
@@ -158,9 +158,9 @@ contract UserRegistry {
     }
 
     /**
-     * @dev Obtiene el perfil completo de un usuario
-     * @param _user Address del usuario
-     * @return UserProfile completo del usuario
+     * @dev Gets the complete profile of a user
+     * @param _user Address of the user
+     * @return UserProfile complete user profile
      */
     function getUserProfile(address _user) external view returns (UserProfile memory) {
         require(
@@ -171,27 +171,27 @@ contract UserRegistry {
     }
 
     /**
-     * @dev Obtiene los datos de verificación de un usuario
-     * @param _user Address del usuario
-     * @return VerificationData datos de verificación
+     * @dev Gets the verification data of a user
+     * @param _user Address of the user
+     * @return VerificationData verification data
      */
     function getVerificationData(address _user) external view returns (VerificationData memory) {
         return verifications[_user];
     }
 
     /**
-     * @dev Verifica si un usuario está registrado
-     * @param _user Address del usuario
-     * @return bool true si está registrado
+     * @dev Checks if a user is registered
+     * @param _user Address of the user
+     * @return bool true if registered
      */
     function isUserRegistered(address _user) external view returns (bool) {
         return userProfiles[_user].registrationDate > 0;
     }
 
     /**
-     * @dev Verifica si un usuario está verificado
-     * @param _user Address del usuario
-     * @return bool true si está verificado
+     * @dev Checks if a user is verified
+     * @param _user Address of the user
+     * @return bool true if verified
      */
     function isUserVerified(address _user) external view returns (bool) {
         return userProfiles[_user].isVerified && verifications[_user].isVerified;

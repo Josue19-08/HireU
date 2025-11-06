@@ -1,19 +1,19 @@
 /**
  * Seed Vault Service
- * Servicio para encriptar y almacenar seed phrases de forma segura
- * Usa WebCrypto API para encriptación AES-GCM 256-bit (HTTPS)
- * Fallback a crypto-js para desarrollo local (HTTP)
+ * Service to encrypt and store seed phrases securely
+ * Uses WebCrypto API for AES-GCM 256-bit encryption (HTTPS)
+ * Fallback to crypto-js for local development (HTTP)
  */
 
 import CryptoJS from "crypto-js";
 
-const SEED_STORAGE_KEY = "hireu_encrypted_seed";
-const KEY_STORAGE_KEY = "hireu_encryption_key";
-const LOCK_STATE_KEY = "hireu_wallet_locked";
-const USE_FALLBACK_KEY = "hireu_use_fallback_crypto";
+const SEED_STORAGE_KEY = "offer-hub_encrypted_seed";
+const KEY_STORAGE_KEY = "offer-hub_encryption_key";
+const LOCK_STATE_KEY = "offer-hub_wallet_locked";
+const USE_FALLBACK_KEY = "offer-hub_use_fallback_crypto";
 
 /**
- * Verifica si Web Crypto API está disponible
+ * Checks if Web Crypto API is available
  */
 function isWebCryptoAvailable(): boolean {
   if (typeof window === "undefined") {
@@ -25,7 +25,7 @@ function isWebCryptoAvailable(): boolean {
 }
 
 /**
- * Obtiene la API de crypto disponible (solo en cliente)
+ * Gets the available crypto API (client only)
  */
 function getCrypto(): Crypto {
   if (typeof window === "undefined") {
@@ -42,12 +42,12 @@ function getCrypto(): Crypto {
 }
 
 /**
- * Genera una clave de encriptación aleatoria
+ * Generates a random encryption key
  */
 async function generateEncryptionKey(): Promise<CryptoKey> {
   const crypto = getCrypto();
   
-  // Verificación adicional de crypto.subtle
+  // Additional crypto.subtle verification
   if (!crypto.subtle) {
     throw new Error("Web Crypto API (crypto.subtle) is not available. Please use a modern browser with HTTPS.");
   }
@@ -63,7 +63,7 @@ async function generateEncryptionKey(): Promise<CryptoKey> {
 }
 
 /**
- * Exporta la clave de encriptación como ArrayBuffer
+ * Exports the encryption key as ArrayBuffer
  */
 async function exportKey(key: CryptoKey): Promise<ArrayBuffer> {
   const crypto = getCrypto();
@@ -71,7 +71,7 @@ async function exportKey(key: CryptoKey): Promise<ArrayBuffer> {
 }
 
 /**
- * Importa una clave de encriptación desde ArrayBuffer
+ * Imports an encryption key from ArrayBuffer
  */
 async function importKey(keyData: ArrayBuffer): Promise<CryptoKey> {
   const crypto = getCrypto();
@@ -88,14 +88,14 @@ async function importKey(keyData: ArrayBuffer): Promise<CryptoKey> {
 }
 
 /**
- * Encripta el seed phrase usando AES-GCM
+ * Encrypts the seed phrase using AES-GCM
  */
 async function encryptSeed(seedPhrase: string, key: CryptoKey): Promise<string> {
   const crypto = getCrypto();
   const encoder = new TextEncoder();
   const data = encoder.encode(seedPhrase);
 
-  // Generar IV aleatorio
+  // Generate random IV
   const iv = crypto.getRandomValues(new Uint8Array(12));
 
   const encrypted = await crypto.subtle.encrypt(
@@ -107,7 +107,7 @@ async function encryptSeed(seedPhrase: string, key: CryptoKey): Promise<string> 
     data
   );
 
-  // Combinar IV + datos encriptados y convertir a base64
+  // Combine IV + encrypted data and convert to base64
   const combined = new Uint8Array(iv.length + encrypted.byteLength);
   combined.set(iv);
   combined.set(new Uint8Array(encrypted), iv.length);
@@ -116,7 +116,7 @@ async function encryptSeed(seedPhrase: string, key: CryptoKey): Promise<string> 
 }
 
 /**
- * Desencripta el seed phrase
+ * Decrypts the seed phrase
  */
 async function decryptSeed(encryptedData: string, key: CryptoKey): Promise<string> {
   const crypto = getCrypto();
@@ -139,16 +139,16 @@ async function decryptSeed(encryptedData: string, key: CryptoKey): Promise<strin
 }
 
 /**
- * Guarda el seed phrase encriptado usando crypto-js (fallback)
+ * Saves the encrypted seed phrase using crypto-js (fallback)
  */
 function saveSeedPhraseFallback(seedPhrase: string): void {
-  // Generar una clave aleatoria para desarrollo
+  // Generate a random key for development
   const encryptionKey = CryptoJS.lib.WordArray.random(256 / 8).toString();
   
-  // Encriptar usando AES
+  // Encrypt using AES
   const encrypted = CryptoJS.AES.encrypt(seedPhrase, encryptionKey).toString();
   
-  // Guardar en localStorage
+  // Save to localStorage
   localStorage.setItem(SEED_STORAGE_KEY, encrypted);
   localStorage.setItem(KEY_STORAGE_KEY, encryptionKey);
   localStorage.setItem(LOCK_STATE_KEY, "false");
@@ -158,42 +158,42 @@ function saveSeedPhraseFallback(seedPhrase: string): void {
 }
 
 /**
- * Guarda el seed phrase encriptado en IndexedDB
- * Solo funciona en el cliente (browser)
+ * Saves the encrypted seed phrase in IndexedDB
+ * Only works in the client (browser)
  */
 export async function saveSeedPhrase(seedPhrase: string): Promise<void> {
   if (typeof window === "undefined") {
     throw new Error("saveSeedPhrase can only be called in browser environment");
   }
 
-  // Si Web Crypto no está disponible, usar fallback
+  // If Web Crypto is not available, use fallback
   if (!isWebCryptoAvailable()) {
     saveSeedPhraseFallback(seedPhrase);
     return;
   }
 
   try {
-    // Generar nueva clave de encriptación
+    // Generate new encryption key
     const key = await generateEncryptionKey();
     const keyData = await exportKey(key);
 
-    // Encriptar seed phrase
+    // Encrypt seed phrase
     const encryptedSeed = await encryptSeed(seedPhrase, key);
 
-    // Guardar en localStorage (IndexedDB sería mejor para producción)
+    // Save to localStorage (IndexedDB would be better for production)
     localStorage.setItem(SEED_STORAGE_KEY, encryptedSeed);
     localStorage.setItem(KEY_STORAGE_KEY, btoa(String.fromCharCode(...new Uint8Array(keyData))));
     localStorage.setItem(LOCK_STATE_KEY, "false");
     localStorage.setItem(USE_FALLBACK_KEY, "false");
   } catch (error) {
     console.error("Error saving seed phrase with Web Crypto, falling back to crypto-js:", error);
-    // Fallback a crypto-js si Web Crypto falla
+    // Fallback to crypto-js if Web Crypto fails
     saveSeedPhraseFallback(seedPhrase);
   }
 }
 
 /**
- * Recupera y desencripta el seed phrase usando crypto-js (fallback)
+ * Retrieves and decrypts the seed phrase using crypto-js (fallback)
  */
 function getSeedPhraseFallback(): string | null {
   try {
@@ -204,7 +204,7 @@ function getSeedPhraseFallback(): string | null {
       return null;
     }
 
-    // Desencriptar usando crypto-js
+    // Decrypt using crypto-js
     const decrypted = CryptoJS.AES.decrypt(encryptedSeed, encryptionKey);
     const seedPhrase = decrypted.toString(CryptoJS.enc.Utf8);
     
@@ -220,7 +220,7 @@ function getSeedPhraseFallback(): string | null {
 }
 
 /**
- * Recupera y desencripta el seed phrase
+ * Retrieves and decrypts the seed phrase
  */
 export async function getSeedPhrase(): Promise<string | null> {
   try {
@@ -236,34 +236,34 @@ export async function getSeedPhrase(): Promise<string | null> {
       return null;
     }
 
-    // Si se usó fallback, usar crypto-js para desencriptar
+    // If fallback was used, use crypto-js to decrypt
     if (useFallback || !isWebCryptoAvailable()) {
       return getSeedPhraseFallback();
     }
 
-    // Importar clave
+    // Import key
     const keyBuffer = Uint8Array.from(atob(keyData), (c) => c.charCodeAt(0));
     const key = await importKey(keyBuffer.buffer);
 
-    // Desencriptar
+    // Decrypt
     const seedPhrase = await decryptSeed(encryptedSeed, key);
     return seedPhrase;
   } catch (error) {
     console.error("Error getting seed phrase, trying fallback:", error);
-    // Intentar con fallback si Web Crypto falla
+    // Try with fallback if Web Crypto fails
     return getSeedPhraseFallback();
   }
 }
 
 /**
- * Verifica si el wallet está desbloqueado
+ * Checks if the wallet is unlocked
  */
 export function isWalletUnlocked(): boolean {
   if (typeof window === "undefined") {
     return false;
   }
 
-  // En desarrollo, auto-unlock
+  // In development, auto-unlock
   if (process.env.NODE_ENV === "development") {
     return true;
   }
@@ -273,7 +273,7 @@ export function isWalletUnlocked(): boolean {
 }
 
 /**
- * Bloquea el wallet
+ * Locks the wallet
  */
 export function lockWallet(): void {
   if (typeof window !== "undefined") {
@@ -282,7 +282,7 @@ export function lockWallet(): void {
 }
 
 /**
- * Desbloquea el wallet (requiere verificación de usuario en producción)
+ * Unlocks the wallet (requires user verification in production)
  */
 export function unlockWallet(): void {
   if (typeof window !== "undefined") {
@@ -291,7 +291,7 @@ export function unlockWallet(): void {
 }
 
 /**
- * Elimina el seed phrase almacenado
+ * Removes the stored seed phrase
  */
 export function clearSeedPhrase(): void {
   if (typeof window !== "undefined") {
@@ -302,7 +302,7 @@ export function clearSeedPhrase(): void {
 }
 
 /**
- * Verifica si existe un seed phrase guardado
+ * Checks if a saved seed phrase exists
  */
 export function hasSeedPhrase(): boolean {
   if (typeof window === "undefined") {

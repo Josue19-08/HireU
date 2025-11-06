@@ -7,13 +7,20 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, ArrowRight, Check } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Network } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { ChainSelector } from "@/components/crosschain/ChainSelector"
+import { useWdkNetwork } from "@/hooks/scaffold-eth/useWdkNetwork"
+import { useCrossChain } from "@/hooks/useCrossChain"
 
 export default function PostProjectPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [isCrossChain, setIsCrossChain] = useState(false)
+  const [destinationChainId, setDestinationChainId] = useState<number | null>(null)
   const router = useRouter()
+  const { chainId } = useWdkNetwork()
+  const { createCrossChainProject, isCrossChainLoading } = useCrossChain()
   const totalSteps = 4
 
   const handleNext = () => {
@@ -30,13 +37,27 @@ export default function PostProjectPage() {
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true)
-    setTimeout(() => {
-      alert("Project posted successfully! (Demo Mode)")
-      setIsLoading(false)
+    try {
+      if (isCrossChain && destinationChainId) {
+        // TODO: Implement real cross-chain project creation
+        // const title = (document.getElementById("title") as HTMLInputElement)?.value
+        // const description = (document.getElementById("description") as HTMLTextAreaElement)?.value
+        // const budget = (document.getElementById("budget") as HTMLInputElement)?.value
+        // const deadline = // calcular deadline
+        // await createCrossChainProject(...)
+        alert(`Cross-chain project will be created on chain ${destinationChainId}! (Demo Mode)`)
+      } else {
+        alert("Project posted successfully! (Demo Mode)")
+      }
       router.push("/")
-    }, 1000)
+    } catch (error) {
+      console.error("Error posting project:", error)
+      alert("Error posting project. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const renderStepContent = () => {
@@ -93,8 +114,8 @@ export default function PostProjectPage() {
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold mb-4">Budget & Timeline</h2>
             <div>
-              <Label htmlFor="budget">Budget (USD)</Label>
-              <Input id="budget" type="number" placeholder="e.g., 5000" />
+              <Label htmlFor="budget">Budget (AVAX)</Label>
+              <Input id="budget" type="number" placeholder="e.g., 10" step="0.01" />
             </div>
             <div>
               <Label htmlFor="budgetType">Budget Type</Label>
@@ -112,6 +133,37 @@ export default function PostProjectPage() {
                 <option>More than 6 months</option>
               </select>
             </div>
+            
+            {/* Cross-Chain Option */}
+            <div className="pt-4 border-t">
+              <div className="flex items-center gap-3 mb-4">
+                <input
+                  type="checkbox"
+                  id="crossChain"
+                  checked={isCrossChain}
+                  onChange={(e) => setIsCrossChain(e.target.checked)}
+                  className="w-4 h-4 rounded border-gray-300"
+                />
+                <Label htmlFor="crossChain" className="flex items-center gap-2 cursor-pointer">
+                  <Network className="h-4 w-4" />
+                  Create as Cross-Chain Project
+                </Label>
+              </div>
+              {isCrossChain && (
+                <div className="mt-3 p-4 bg-blue-50 rounded-md border border-blue-200">
+                  <p className="text-sm text-blue-800 mb-3">
+                    This project will be created on multiple Avalanche blockchains, allowing freelancers from different chains to participate.
+                  </p>
+                  <ChainSelector
+                    selectedChainId={destinationChainId}
+                    onChainSelect={setDestinationChainId}
+                    label="Select Destination Chain"
+                    currentChainId={chainId || undefined}
+                    excludeCurrentChain={true}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         )
       case 4:
@@ -126,6 +178,17 @@ export default function PostProjectPage() {
                 <p><span className="font-medium">Budget:</span> $5,000 (Fixed Price)</p>
                 <p><span className="font-medium">Duration:</span> 1-3 months</p>
                 <p><span className="font-medium">Experience:</span> Intermediate</p>
+                {isCrossChain && destinationChainId && (
+                  <div className="mt-3 pt-3 border-t">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Network className="h-4 w-4 text-[#15949C]" />
+                      <span className="font-medium text-[#15949C]">Cross-Chain Project</span>
+                    </div>
+                    <p className="text-xs text-gray-600">
+                      This project will be available on multiple Avalanche blockchains
+                    </p>
+                  </div>
+                )}
               </div>
             </Card>
             <p className="text-sm text-gray-600">

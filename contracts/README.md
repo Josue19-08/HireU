@@ -1,46 +1,46 @@
-# Smart Contracts - HireU
+# Smart Contracts - OFFER-HUB
 
-## Contratos
+## Contracts
 
-5 contratos en `src/`:
+5 contracts in `src/`:
 
-- **UserRegistry.sol** - Registro y verificación de usuarios
-- **UserStatistics.sol** - Estadísticas inmutables de freelancers
-- **ProjectManager.sol** - Gestión de proyectos
-- **EscrowPayment.sol** - Pagos con escrow y SRCW
-- **WorkVerification.sol** - Verificación de trabajos
+- **UserRegistry.sol** - User registration and verification
+- **UserStatistics.sol** - Immutable freelancer statistics
+- **ProjectManager.sol** - Project management
+- **EscrowPayment.sol** - Escrow payments with SRCW
+- **WorkVerification.sol** - Work verification
 
-## Instalación
+## Installation
 
 ```bash
 npm install
 ```
 
-## Configuración
+## Configuration
 
-Crea `.env` en `contracts/`:
+Create `.env` in `contracts/`:
 
 ```env
-PRIVATE_KEY=tu_private_key
+PRIVATE_KEY=your_private_key
 LOCAL_RPC_URL=http://127.0.0.1:9650/ext/bc/C/rpc
 FUJI_RPC_URL=https://api.avax-test.network/ext/bc/C/rpc
 MAINNET_RPC_URL=https://api.avax.network/ext/bc/C/rpc
-SNOWTRACE_API_KEY=opcional
+SNOWTRACE_API_KEY=optional
 ```
 
-## Comandos
+## Commands
 
 ```bash
-npm run compile       # Compilar contratos
-npm run test          # Ejecutar tests
-npm run deploy:local  # Desplegar a red local
-npm run deploy:fuji   # Desplegar a Fuji testnet
-npm run deploy:mainnet # Desplegar a mainnet
+npm run compile       # Compile contracts
+npm run test          # Run tests
+npm run deploy:local  # Deploy to local network
+npm run deploy:fuji   # Deploy to Fuji testnet
+npm run deploy:mainnet # Deploy to mainnet
 ```
 
 ## Deployment
 
-El script `scripts/deploy.js` despliega todos los contratos en orden:
+The `scripts/deploy.js` script deploys all contracts in order:
 
 1. UserRegistry
 2. UserStatistics
@@ -48,29 +48,29 @@ El script `scripts/deploy.js` despliega todos los contratos en orden:
 4. EscrowPayment
 5. WorkVerification
 
-Las direcciones se guardan en `deployments/[network].json`.
+Addresses are saved in `deployments/[network].json`.
 
-## Integración
+## Integration
 
-Después de desplegar, usa las direcciones en el frontend:
+After deploying, use the addresses in the frontend:
 
 ```typescript
 import { useScaffoldWriteContract } from "@/hooks/scaffold-eth";
 
 const { writeContractAsync } = useScaffoldWriteContract({
   contractName: "UserRegistry",
-  address: "0x...", // dirección desplegada
+  address: "0x...", // deployed address
   abi: userRegistryAbi,
 });
 ```
 
-## Dependencias
+## Dependencies
 
 - `@openzeppelin/contracts` ^5.0.0
 - `hardhat` ^2.19.0
 - `@nomicfoundation/hardhat-toolbox` ^4.0.0
 
-## Redes
+## Networks
 
 - **Local**: Chain ID 1337
 - **Fuji**: Chain ID 43113

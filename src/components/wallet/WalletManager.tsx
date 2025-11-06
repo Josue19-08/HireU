@@ -61,7 +61,7 @@ export default function WalletManager() {
       setSeedPhrase(newSeedPhrase);
       toast.success("Wallet created successfully!");
       
-      // Redirigir a la página principal después de crear el wallet
+      // Redirect to main page after creating wallet
       setTimeout(() => {
         router.push("/");
       }, 1500);
@@ -70,7 +70,7 @@ export default function WalletManager() {
       toast.error(errorMessage);
       console.error("Error creating wallet:", error);
       
-      // Si el error es por crypto no disponible, mostrar mensaje más claro
+      // If error is due to crypto not available, show clearer message
       if (errorMessage.includes("Crypto API") || errorMessage.includes("crypto.subtle")) {
         toast.error("Web Crypto API is not available. Please use a modern browser.");
       }
@@ -91,7 +91,7 @@ export default function WalletManager() {
       setImportSeed("");
       toast.success("Wallet imported successfully!");
       
-      // Redirigir a la página principal después de importar el wallet
+      // Redirect to main page after importing wallet
       setTimeout(() => {
         router.push("/");
       }, 1500);
@@ -109,7 +109,7 @@ export default function WalletManager() {
       await connectWallet();
       toast.success("Wallet connected!");
       
-      // Redirigir a la página principal después de conectar
+      // Redirect to main page after connecting
       setTimeout(() => {
         router.push("/");
       }, 1000);
@@ -144,7 +144,7 @@ export default function WalletManager() {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
-  // No renderizar nada hasta que esté montado en el cliente
+  // Don't render anything until mounted on client
   if (!isMounted || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -164,7 +164,7 @@ export default function WalletManager() {
               Avalanche Wallet
             </CardTitle>
             <CardDescription>
-              Create or import a wallet to start using HireU on Avalanche
+              Create or import a wallet to start using OFFER-HUB on Avalanche
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -232,7 +232,7 @@ export default function WalletManager() {
   if (isLocked) {
     return (
       <div className="max-w-2xl mx-auto">
-        {/* Botón para ir a página principal */}
+        {/* Button to go to main page */}
         <div className="mb-4">
           <Button
             variant="ghost"
@@ -258,11 +258,11 @@ export default function WalletManager() {
             <Button
               onClick={async () => {
                 unlock();
-                // Si ya hay cuenta, no necesitamos conectar de nuevo
+                // If account already exists, we don't need to connect again
                 if (!account) {
                   await handleConnect();
                 } else {
-                  // Solo desbloquear si ya está conectado
+                  // Only unlock if already connected
                   toast.success("Wallet unlocked!");
                   setTimeout(() => {
                     router.push("/");
@@ -293,7 +293,7 @@ export default function WalletManager() {
   // Wallet connected
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Botón para ir a página principal */}
+      {/* Button to go to main page */}
       <div>
         <Button
           variant="ghost"

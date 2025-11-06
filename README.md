@@ -1,47 +1,47 @@
-# HireU - Plataforma Freelance en Avalanche
+# OFFER-HUB - Freelance Platform on Avalanche
 
-Plataforma freelance descentralizada construida en Avalanche C-Chain con smart contracts y wallets integrados.
+Decentralized freelance platform built on Avalanche C-Chain with smart contracts and integrated wallets.
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
-HireU/
-├── contracts/              # Smart contracts en Solidity
-│   ├── src/               # Contratos fuente
-│   ├── scripts/           # Scripts de deployment
-│   └── test/              # Tests de contratos
+OFFER-HUB/
+├── contracts/              # Smart contracts in Solidity
+│   ├── src/               # Source contracts
+│   ├── scripts/           # Deployment scripts
+│   └── test/              # Contract tests
 │
 ├── src/
-│   ├── app/               # Páginas Next.js
-│   ├── components/        # Componentes React
+│   ├── app/               # Next.js pages
+│   ├── components/        # React components
 │   ├── contexts/          # React Context (WdkContext)
 │   ├── hooks/             # Custom hooks
-│   ├── lib/               # Utilidades (WDK implementation)
-│   ├── services/          # Servicios (seedVault)
-│   └── config/            # Configuración (networks)
+│   ├── lib/               # Utilities (WDK implementation)
+│   ├── services/          # Services (seedVault)
+│   └── config/            # Configuration (networks)
 │
-└── package.json           # Dependencias del frontend
+└── package.json           # Frontend dependencies
 ```
 
-## Instalación
+## Installation
 
 ```bash
 npm install
 ```
 
-## Configuración
+## Configuration
 
-Crea `.env.local` en la raíz:
+Create `.env.local` in the root:
 
 ```env
 NEXT_PUBLIC_NETWORK=local
 ```
 
-O usa `fuji` o `mainnet` según necesites.
+Or use `fuji` or `mainnet` as needed.
 
-## Uso
+## Usage
 
-### Desarrollo
+### Development
 
 ```bash
 npm run dev
@@ -49,10 +49,10 @@ npm run dev
 
 ### Wallet
 
-1. Ve a `/wallet`
-2. Crea o importa un wallet
-3. El wallet se conecta automáticamente
-4. Redirige a la página principal
+1. Go to `/wallet`
+2. Create or import a wallet
+3. The wallet connects automatically
+4. Redirects to the main page
 
 ### Smart Contracts
 
@@ -60,28 +60,28 @@ npm run dev
 cd contracts
 npm install
 npm run compile
-npm run deploy:local  # o deploy:fuji, deploy:mainnet
+npm run deploy:local  # or deploy:fuji, deploy:mainnet
 ```
 
-## Componentes Principales
+## Main Components
 
 ### Wallet
 
-- **WalletManager** (`src/components/wallet/WalletManager.tsx`) - Página completa de gestión
-- **WalletButton** (`src/components/wallet/WalletButton.tsx`) - Botón en navbar
-- **WdkContext** (`src/contexts/WdkContext.tsx`) - Estado global del wallet
+- **WalletManager** (`src/components/wallet/WalletManager.tsx`) - Complete management page
+- **WalletButton** (`src/components/wallet/WalletButton.tsx`) - Button in navbar
+- **WdkContext** (`src/contexts/WdkContext.tsx`) - Global wallet state
 
 ### Hooks
 
-- `useWdk()` - Acceso al contexto del wallet
-- `useWdkAccount()` - Obtener cuenta actual
-- `useWdkBalance()` - Obtener balance formateado
-- `useWdkNetwork()` - Gestionar red actual
-- `useWdkProvider()` - Provider y signer de ethers.js
-- `useScaffoldReadContract()` - Leer contratos
-- `useScaffoldWriteContract()` - Escribir en contratos
+- `useWdk()` - Access to wallet context
+- `useWdkAccount()` - Get current account
+- `useWdkBalance()` - Get formatted balance
+- `useWdkNetwork()` - Manage current network
+- `useWdkProvider()` - Provider and signer from ethers.js
+- `useScaffoldReadContract()` - Read contracts
+- `useScaffoldWriteContract()` - Write to contracts
 
-## Redes Configuradas
+## Configured Networks
 
 - **Local**: `http://127.0.0.1:9650/ext/bc/C/rpc` (Chain ID: 1337)
 - **Fuji**: `https://api.avax-test.network/ext/bc/C/rpc` (Chain ID: 43113)
@@ -89,35 +89,35 @@ npm run deploy:local  # o deploy:fuji, deploy:mainnet
 
 ## Smart Contracts
 
-5 contratos en `contracts/src/`:
+5 contracts in `contracts/src/`:
 
-1. **UserRegistry.sol** - Registro de usuarios
-2. **UserStatistics.sol** - Estadísticas de freelancers
-3. **ProjectManager.sol** - Gestión de proyectos
-4. **EscrowPayment.sol** - Pagos con escrow
-5. **WorkVerification.sol** - Verificación de trabajos
+1. **UserRegistry.sol** - User registration
+2. **UserStatistics.sol** - Freelancer statistics
+3. **ProjectManager.sol** - Project management
+4. **EscrowPayment.sol** - Escrow payments
+5. **WorkVerification.sol** - Work verification
 
-Ver `contracts/README.md` para detalles.
+See `contracts/README.md` for details.
 
-## Implementación WDK
+## WDK Implementation
 
-El WDK no está disponible como paquete npm, así que implementamos una versión propia usando:
+WDK is not available as an npm package, so we implemented our own version using:
 
-- `ethers.js` v6 para wallets y providers
-- `@scure/bip39` para seed phrases
-- BIP44 para derivación de cuentas
+- `ethers.js` v6 for wallets and providers
+- `@scure/bip39` for seed phrases
+- BIP44 for account derivation
 
-El código está en `src/lib/wdk.ts` y es compatible con la API esperada del WDK oficial.
+The code is in `src/lib/wdk.ts` and is compatible with the expected API of the official WDK.
 
-## Seguridad
+## Security
 
-- Seed phrases encriptadas con AES-GCM (Web Crypto API) o crypto-js (fallback en HTTP)
-- Almacenamiento en localStorage (considerar IndexedDB para producción)
-- Auto-unlock solo en desarrollo
-- Lock manual en producción
+- Seed phrases encrypted with AES-GCM (Web Crypto API) or crypto-js (fallback on HTTP)
+- Storage in localStorage (consider IndexedDB for production)
+- Auto-unlock only in development
+- Manual lock in production
 
-## Notas
+## Notes
 
-- El balance se actualiza cada 10 segundos cuando el wallet está conectado
-- Si el nodo local no está corriendo, el balance mostrará 0 sin errores
-- Los errores de conexión RPC se manejan silenciosamente en desarrollo
+- Balance updates every 10 seconds when wallet is connected
+- If the local node is not running, balance will show 0 without errors
+- RPC connection errors are handled silently in development

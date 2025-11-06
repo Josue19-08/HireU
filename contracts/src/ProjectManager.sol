@@ -5,8 +5,8 @@ import "./UserRegistry.sol";
 
 /**
  * @title ProjectManager
- * @dev Gestión de proyectos freelance con estados inmutables
- * @notice Cada proyecto tiene un historial inmutable de cambios
+ * @dev Freelance project management with immutable states
+ * @notice Each project has an immutable history of changes
  */
 contract ProjectManager {
     enum ProjectStatus {
@@ -21,16 +21,16 @@ contract ProjectManager {
     struct Project {
         uint256 projectId;
         address client;
-        address freelancer; // Asignado cuando se acepta
+        address freelancer; // Assigned when accepted
         string title;
         string description;
-        string requirementsHash; // IPFS hash de los requisitos
+        string requirementsHash; // IPFS hash of requirements
         uint256 budget;
         uint256 deadline;
         uint256 createdAt;
         uint256 updatedAt;
         ProjectStatus status;
-        string deliverablesHash; // IPFS hash de entregables
+        string deliverablesHash; // IPFS hash of deliverables
         uint256 milestoneCount;
         bool escrowFunded;
     }
@@ -45,22 +45,22 @@ contract ProjectManager {
         string deliverableHash;
     }
 
-    // Mapping de projectId a Project
+    // Mapping from projectId to Project
     mapping(uint256 => Project) public projects;
     
-    // Mapping de projectId a array de milestones
+    // Mapping from projectId to array of milestones
     mapping(uint256 => Milestone[]) public projectMilestones;
     
-    // Contador de proyectos
+    // Project counter
     uint256 public projectCounter;
     
-    // Referencia al UserRegistry
+    // Reference to UserRegistry
     UserRegistry public userRegistry;
     
-    // Referencia al contrato de Escrow
+    // Reference to Escrow contract
     address public escrowContract;
 
-    // Eventos
+    // Events
     event ProjectCreated(
         uint256 indexed projectId,
         address indexed client,
@@ -134,8 +134,8 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Establece la dirección del contrato de Escrow
-     * @param _escrowContract Address del contrato EscrowPayment
+     * @dev Sets the Escrow contract address
+     * @param _escrowContract Address of the EscrowPayment contract
      */
     function setEscrowContract(address _escrowContract) external {
         require(_escrowContract != address(0), "ProjectManager: Invalid escrow contract");
@@ -143,13 +143,13 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Crea un nuevo proyecto (estado Draft)
-     * @param _title Título del proyecto
-     * @param _description Descripción del proyecto
-     * @param _requirementsHash Hash IPFS de los requisitos
-     * @param _budget Presupuesto del proyecto
-     * @param _deadline Fecha límite en timestamp
-     * @return uint256 ID del proyecto creado
+     * @dev Creates a new project (Draft status)
+     * @param _title Project title
+     * @param _description Project description
+     * @param _requirementsHash IPFS hash of requirements
+     * @param _budget Project budget
+     * @param _deadline Deadline as timestamp
+     * @return uint256 ID of the created project
      */
     function createProject(
         string memory _title,
@@ -196,8 +196,8 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Publica un proyecto (cambia de Draft a Published)
-     * @param _projectId ID del proyecto
+     * @dev Publishes a project (changes from Draft to Published)
+     * @param _projectId Project ID
      */
     function publishProject(uint256 _projectId) 
         external 
@@ -218,9 +218,9 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Asigna un freelancer a un proyecto
-     * @param _projectId ID del proyecto
-     * @param _freelancer Address del freelancer a asignar
+     * @dev Assigns a freelancer to a project
+     * @param _projectId Project ID
+     * @param _freelancer Address of the freelancer to assign
      */
     function assignFreelancer(uint256 _projectId, address _freelancer)
         external
@@ -255,10 +255,10 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Crea un milestone para un proyecto
-     * @param _projectId ID del proyecto
-     * @param _description Descripción del milestone
-     * @param _amount Monto del milestone
+     * @dev Creates a milestone for a project
+     * @param _projectId Project ID
+     * @param _description Milestone description
+     * @param _amount Milestone amount
      */
     function createMilestone(
         uint256 _projectId,
@@ -291,10 +291,10 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Marca un milestone como completado
-     * @param _projectId ID del proyecto
-     * @param _milestoneId ID del milestone
-     * @param _deliverableHash Hash IPFS del entregable
+     * @dev Marks a milestone as completed
+     * @param _projectId Project ID
+     * @param _milestoneId Milestone ID
+     * @param _deliverableHash IPFS hash of the deliverable
      */
     function completeMilestone(
         uint256 _projectId,
@@ -324,9 +324,9 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Marca un proyecto como completado
-     * @param _projectId ID del proyecto
-     * @param _deliverablesHash Hash IPFS de todos los entregables
+     * @dev Marks a project as completed
+     * @param _projectId Project ID
+     * @param _deliverablesHash IPFS hash of all deliverables
      */
     function completeProject(
         uint256 _projectId,
@@ -349,9 +349,9 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Obtiene un proyecto completo
-     * @param _projectId ID del proyecto
-     * @return Project proyecto completo
+     * @dev Gets a complete project
+     * @param _projectId Project ID
+     * @return Project complete project
      */
     function getProject(uint256 _projectId)
         external
@@ -363,9 +363,9 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Obtiene todos los milestones de un proyecto
-     * @param _projectId ID del proyecto
-     * @return Milestone[] array de milestones
+     * @dev Gets all milestones of a project
+     * @param _projectId Project ID
+     * @return Milestone[] array of milestones
      */
     function getProjectMilestones(uint256 _projectId)
         external
@@ -377,10 +377,10 @@ contract ProjectManager {
     }
 
     /**
-     * @dev Obtiene un milestone específico
-     * @param _projectId ID del proyecto
-     * @param _milestoneId ID del milestone
-     * @return Milestone milestone solicitado
+     * @dev Gets a specific milestone
+     * @param _projectId Project ID
+     * @param _milestoneId Milestone ID
+     * @return Milestone requested milestone
      */
     function getMilestone(uint256 _projectId, uint256 _milestoneId)
         external

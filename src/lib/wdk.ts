@@ -1,7 +1,7 @@
 /**
  * WDK Implementation
- * Implementación del Wallet Development Kit usando ethers.js y BIP39
- * Compatible con la API esperada del Tether WDK
+ * Wallet Development Kit implementation using ethers.js and BIP39
+ * Compatible with the expected Tether WDK API
  */
 
 import { ethers } from "ethers";
@@ -23,40 +23,40 @@ export class WDK {
 
   constructor(seedPhrase: string) {
     this.seedPhrase = seedPhrase;
-    // Validar seed phrase
+    // Validate seed phrase
     if (!validateMnemonic(seedPhrase, wordlist)) {
       throw new Error("Invalid seed phrase");
     }
-    // Crear mnemonic object
+    // Create mnemonic object
     this.mnemonic = ethers.Mnemonic.fromPhrase(seedPhrase);
   }
 
   /**
-   * Genera una seed phrase aleatoria (12 palabras)
+   * Generates a random seed phrase (12 words)
    */
   static getRandomSeedPhrase(): string {
-    return generateMnemonic(wordlist, 128); // 128 bits = 12 palabras
+    return generateMnemonic(wordlist, 128); // 128 bits = 12 words
   }
 
   /**
-   * Genera una seed phrase de 24 palabras
+   * Generates a 24-word seed phrase
    */
   static getRandomSeedPhrase24(): string {
-    return generateMnemonic(wordlist, 256); // 256 bits = 24 palabras
+    return generateMnemonic(wordlist, 256); // 256 bits = 24 words
   }
 
   /**
-   * Obtiene una cuenta para una cadena específica
-   * @param chainId - Chain ID como string (ej: "43114" para Avalanche Mainnet)
-   * @param index - Índice de la cuenta (default: 0)
+   * Gets an account for a specific chain
+   * @param chainId - Chain ID as string (e.g., "43114" for Avalanche Mainnet)
+   * @param index - Account index (default: 0)
    */
   getAccount(chainId: string, index: number = 0): WDKAccount {
-    // Derivar path según BIP44: m/44'/coin_type'/account'/change/address_index
-    // Para Avalanche C-Chain (EVM), usamos coin_type 60 (Ethereum) ya que es EVM compatible
-    // Usamos el chainId para diferenciar cuentas entre redes
+    // Derive path according to BIP44: m/44'/coin_type'/account'/change/address_index
+    // For Avalanche C-Chain (EVM), we use coin_type 60 (Ethereum) since it's EVM compatible
+    // We use chainId to differentiate accounts between networks
     const path = `m/44'/60'/${chainId}'/0/${index}`;
     
-    // Crear wallet directamente desde el mnemonic con el path completo
+    // Create wallet directly from mnemonic with full path
     const wallet = ethers.HDNodeWallet.fromPhrase(this.mnemonic.phrase, path);
     
     return {

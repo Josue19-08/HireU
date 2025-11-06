@@ -153,7 +153,7 @@ export function WdkProvider({ children }: { children: React.ReactNode }) {
       
       setBalance(bal);
     } catch (error: any) {
-      // No mostrar error si es un timeout o conexión fallida (normal en desarrollo)
+      // Don't show error if it's a timeout or failed connection (normal in development)
       if (!error?.message?.includes("timeout") && !error?.message?.includes("Failed to fetch")) {
         console.warn("Error refreshing balance:", error?.message || error);
       }
@@ -248,7 +248,7 @@ export function WdkProvider({ children }: { children: React.ReactNode }) {
           
           setBalance(balance);
         } catch (error: any) {
-          // No mostrar error si es un timeout o conexión fallida
+          // Don't show error if it's a timeout or failed connection
           if (!error?.message?.includes("timeout") && !error?.message?.includes("Failed to fetch")) {
             console.warn("Error fetching balance:", error?.message || error);
           }
