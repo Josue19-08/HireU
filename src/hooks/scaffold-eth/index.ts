@@ -1,6 +1,6 @@
 /**
- * Scaffold-ETH compatible hooks for HireU
- * Hooks compatibles con Scaffold-ETH para HireU
+ * Scaffold-ETH compatible hooks for OFFER-HUB
+ * Hooks compatible with Scaffold-ETH for OFFER-HUB
  */
 
 export { useWdkAccount } from "./useWdkAccount";
