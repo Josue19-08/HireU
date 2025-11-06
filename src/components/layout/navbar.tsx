@@ -68,13 +68,18 @@ export default function Navbar({
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 group transition-transform duration-200 hover:scale-105"
+            className="flex items-center gap-3 group transition-transform duration-200 hover:scale-105"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-[#15949C] to-[#002333] rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">H</span>
-            </div>
-            <span className="text-[#002333] font-bold text-lg tracking-tight">
-              HIRE U
+            <Image
+              src="/image.png"
+              alt="OFFER-HUB Logo"
+              width={50}
+              height={50}
+              className="object-contain"
+              priority
+            />
+            <span className="text-[#002333] font-bold text-xl tracking-tight">
+              OFFER-HUB
             </span>
           </Link>
 

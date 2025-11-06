@@ -70,7 +70,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-[#002333] mb-4">
-                Why Choose HireU?
+                Why Choose OFFER-HUB?
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 Everything you need to hire talent and manage projects successfully
@@ -105,7 +105,7 @@ export default function HomePage() {
               Ready to Get Started?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Join thousands of clients and freelancers collaborating on HireU
+              Join thousands of clients and freelancers collaborating on OFFER-HUB
             </p>
             <Link href="/onboarding/sign-up">
               <Button size="lg" className="bg-white text-[#002333] hover:bg-white/90 text-lg h-12 px-8">

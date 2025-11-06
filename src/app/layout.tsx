@@ -3,7 +3,7 @@ import "./globals.css";
 import { WdkProvider } from "@/contexts/WdkContext";
 
 export const metadata: Metadata = {
-  title: "HireU - Freelance Platform on Avalanche",
+  title: "OFFER-HUB - Freelance Platform on Avalanche",
   description: "Decentralized freelance platform built on Avalanche C-Chain",
 };
 
