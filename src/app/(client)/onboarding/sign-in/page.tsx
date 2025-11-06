@@ -39,7 +39,7 @@ export default function SignInPage() {
         <Card className="w-full max-w-md p-6 shadow-lg">
           <h1 className="text-2xl font-semibold text-center mb-2">Welcome Back</h1>
           <p className="text-center text-sm text-gray-500 mb-6">
-            Sign in to your HireU account
+            Sign in to your OFFER-HUB account
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
