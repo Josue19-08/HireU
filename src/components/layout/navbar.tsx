@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, User } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import WalletButton from "@/components/wallet/WalletButton";
 
 interface NavbarProps {
   showAuth?: boolean;
@@ -41,6 +42,7 @@ export default function Navbar({
     { href: "/post-project", label: "Post Project" },
     { href: "/profile", label: "Profile" },
     { href: "/messages", label: "Messages" },
+    { href: "/wallet", label: "Wallet" },
   ];
 
   const isActiveRoute = (href: string) => {
@@ -104,6 +106,7 @@ export default function Navbar({
 
           {/* Right Section */}
           <div className="flex items-center gap-3">
+            <WalletButton />
             {showAuth && (
               <div className="hidden md:flex items-center gap-2">
                 <Link href="/onboarding/sign-in">
