@@ -1,0 +1,33 @@
+{
+  "name": "hireu-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for HireU freelance platform on Avalanche",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js --network local",
+    "deploy:fuji": "hardhat run scripts/deploy.js --network fuji",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network mainnet",
+    "clean": "hardhat clean"
+  },
+  "keywords": [
+    "avalanche",
+    "smart-contracts",
+    "freelance",
+    "escrow",
+    "srcw"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "@scure/bip39": "^2.0.1",
+    "dotenv": "^16.3.1"
+  }
+}
