@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Twitter, Linkedin, Instagram, Github, Mail, Phone } from "lucide-react";
 
@@ -25,10 +26,15 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             {/* Company Info */}
             <div className="lg:col-span-1">
-              <Link href="/" className="flex items-center mb-6 w-fit group">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#15949C] to-[#002333] rounded-lg flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-xl">H</span>
-                </div>
+              <Link href="/" className="flex items-center mb-6 w-fit group gap-3">
+                <Image
+                  src="/image.png"
+                  alt="OFFER-HUB logo"
+                  width={48}
+                  height={48}
+                  className="rounded-xl transition-transform duration-200 group-hover:scale-105"
+                  priority
+                />
                 <span className="text-2xl font-bold">OFFER-HUB</span>
               </Link>
               <p className="text-white/70 mb-6 max-w-xs leading-relaxed text-sm">
