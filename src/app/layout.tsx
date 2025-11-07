@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { WdkProvider } from "@/contexts/WdkContext";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "OFFER-HUB - Freelance Platform on Avalanche",
@@ -15,9 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <WdkProvider>
-          {children}
-        </WdkProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
