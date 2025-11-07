@@ -1,5 +1,5 @@
 /**
- * @fileoverview Next.js configuration for HireU frontend demo
+ * @fileoverview Next.js configuration for OFFER-HUB frontend demo
  */
 
 import type { NextConfig } from "next";

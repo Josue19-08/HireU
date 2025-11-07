@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -25,21 +26,38 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted flex flex-col">
-      <div className="p-4">
-        <Link href="/" className="flex items-center gap-2 w-fit">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#15949C] to-[#002333] rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">H</span>
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      {/* Navbar as elongated box */}
+      <div className="w-full bg-gray-200 border-b border-gray-300">
+        <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src="/image.png"
+                alt="OFFER-HUB Logo"
+                width={40}
+                height={40}
+                className="object-contain"
+                priority
+              />
+              <span className="text-[#002333] font-bold text-lg tracking-tight">
+                OFFER-HUB
+              </span>
+            </Link>
+            <Link href="/onboarding/sign-up">
+              <Button className="bg-[#002333] hover:bg-[#002333]/90 text-white">
+                Sign up
+              </Button>
+            </Link>
           </div>
-          <span className="text-[#002333] font-bold text-lg">HIRE U</span>
-        </Link>
+        </div>
       </div>
       
       <div className="flex flex-col items-center justify-start flex-1 px-4 pt-8">
         <Card className="w-full max-w-md p-6 shadow-lg">
           <h1 className="text-2xl font-semibold text-center mb-2">Welcome Back</h1>
           <p className="text-center text-sm text-gray-500 mb-6">
-            Sign in to your HireU account
+            Sign in to your OFFER-HUB account
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { WdkProvider } from "@/contexts/WdkContext";
 
 export const metadata: Metadata = {
-  title: "HireU - UI Demo",
-  description: "Frontend UI demonstration for HireU platform",
+  title: "OFFER-HUB - Freelance Platform on Avalanche",
+  description: "Decentralized freelance platform built on Avalanche C-Chain",
 };
 
 export default function RootLayout({
@@ -13,7 +14,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <WdkProvider>
+          {children}
+        </WdkProvider>
+      </body>
     </html>
   );
 }
