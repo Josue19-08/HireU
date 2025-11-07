@@ -1,41 +1,52 @@
-# HireU - UI Demo
+# OfferHub
 
-This is a **UI-only demonstration** of the HireU platform. It showcases the visual design and user interface without backend functionality.
+Decentralized freelance platform focused on trust, guaranteed payments, and global collaboration between companies and professionals.
 
-## About
-
-HireU is a frontend clone of OfferHub, designed to demonstrate the user interface and user experience. All data is mocked and no real backend connections are made.
+## Overview
+OfferHub combines Avalanche smart contracts and USDT payments to ensure every milestone releases funds automatically. The Next.js frontend delivers dashboards for clients and talent, integrating verification, project management, and messaging.
 
 ## Features
+- Post and manage projects with detailed requirements
+- Handle applications and milestone agreements
+- Escrow funds via smart contracts with conditional release
+- Reputation system backed by verifiable metrics
+- Responsive interface with built-in dark mode
 
-- 🎨 Modern, responsive design
-- 📱 Mobile-friendly interface
-- 🌙 Dark mode support
-- 🎭 Mock data for demonstration
-- 🚀 Built with Next.js 15, TypeScript, and Tailwind CSS
+## Architecture
+- **Frontend:** Next.js 15 + TypeScript
+- **UI:** Tailwind CSS, Radix UI, shadcn/ui
+- **Animations:** Framer Motion
+- **On-chain:** Smart contracts on Avalanche, tokenized payments in USDT (Tether)
 
-## Getting Started
+## Prerequisites
+- Node.js 18+
+- npm 9+
 
+## Installation
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
-npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+## Run locally
+```bash
+npm run dev
+```
+App available at http://localhost:3000.
 
-## Tech Stack
+## Project structure
+```
+src/
+  components/      # UI-only components
+  hooks/           # Business logic hooks named use-*
+  pages/           # Orchestrator pages
+  types/           # Shared type definitions
+```
 
-- **Framework:** Next.js 15 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **UI Components:** Radix UI + shadcn/ui
-- **Animations:** Framer Motion
-- **Icons:** Lucide React
+## Powered by
+- Avalanche Network
+- Tether (USDT)
 
-## Note
-
-This is a **demonstration UI only**. No actual data is saved, no authentication is performed, and no backend services are connected. All interactions are simulated for visual presentation purposes.
+## Ecosystem Tags
+- ecosystem: avalanche
+- ecosystem: tether
 
