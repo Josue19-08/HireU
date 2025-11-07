@@ -390,7 +390,7 @@ flowchart TB
         R5[✅ Status: VERIFIED<br/>- verifier: address<br/>- verifiedAt: timestamp]
         R6[❌ Status: REJECTED<br/>- rejectionReason: string]
         R7[📊 UserStatistics<br/>verifyWorkDelivery<br/>- onTimeDelivery: bool]
-        R8[🔄 If rejected:<br/>Freelancer can add evidence<br/>addEvidence()]
+        R8[🔄 If rejected:<br/>Freelancer can add evidence<br/>using addEvidence function]
         
         E5 --> R1
         R1 --> R2
